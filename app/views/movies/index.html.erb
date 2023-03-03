@@ -1,0 +1,38 @@
+
+
+
+<%= form_with url: movies_path, method: :get, data: {'turbo-frame': 'results'} do |form| %>
+  <%= form.label :query, "Search for:" %>
+  <%= form.text_field :query, value: @query %>
+  <%= form.submit "Search" %>
+<% end %>
+
+<turbo-frame id="results">
+<p>Total results: <%= @total_results %></p>
+    <div class="row row-cols-1 row-cols-md-2 g-4">      
+            <% @results.each do |result| %>
+                <div class="col">
+                    <div class="card">                        
+                        <%= render_image result['poster_path'] %>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        </div>
+                    </div>
+                </div>    
+            <% end%>
+        </div>
+    </div>
+
+<p>Page: <%= @current_page %></p>
+
+<p> <%= link_to "Last page ", movies_path(query: @query, page: @total_pages)%></p>
+
+<% if @current_page + 1  <= @total_pages %>
+    <p> <%= link_to "Next page ", movies_path(query: @query, page: @current_page + 1)%></p>
+<% end %>
+<% if @current_page  > 1 %>
+<p> <%= link_to "Previous page ", movies_path(query: @query, page: @current_page - 1)%></p>
+<% end%>
+
+</turbo-frame>
